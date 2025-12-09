@@ -932,7 +932,7 @@
         const btn = document.getElementById('clickBtn');
         const messageBox = document.getElementById('message-box');
         const countElement = document.getElementById('count');
-        let messageCount = parseInt(localStorage.getItem('messageCount')) || 0;
+        let messageCount = 0; // Her sayfa yenilendiğinde sıfırdan başla
         countElement.textContent = messageCount;
         
         // Ses efekti eklemek istersen buraya kod eklenebilir ama sessiz daha güvenli.
@@ -958,7 +958,6 @@
             // Mesaj sayacını artır
             messageCount++;
             countElement.textContent = messageCount;
-            localStorage.setItem('messageCount', messageCount);
             
             // Huzura Adım Adım progress bar'ı güncelle
             updatePeaceProgress();
