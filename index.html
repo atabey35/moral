@@ -78,6 +78,89 @@
             line-height: 1.4;
         }
 
+        /* Huzura Adım Adım Progress Bar */
+        .peace-progress {
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .peace-progress-label {
+            text-align: center;
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .peace-track {
+            width: 100%;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .peace-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+            border-radius: 25px;
+            transition: width 0.8s ease;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.5);
+        }
+
+        .mihrap-box {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: left 0.8s ease;
+            z-index: 10;
+            border: 3px solid #ff9a9e;
+            animation: mihrapPulse 2s infinite;
+        }
+
+        @keyframes mihrapPulse {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.1);
+            }
+        }
+
+        .peace-destination {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            z-index: 5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .peace-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
         .btn {
             background: #fff;
             color: #ff9a9e;
@@ -651,6 +734,22 @@
             Hazır mısın? 🎈
         </div>
 
+        <!-- Huzura Adım Adım Progress Bar -->
+        <div class="peace-progress">
+            <div class="peace-progress-label">Huzura Adım Adım 🕊️</div>
+            <div class="peace-track">
+                <div class="peace-fill" id="peaceFill" style="width: 0%;">
+                    <div class="mihrap-box" id="mihrapBox">💖</div>
+                </div>
+                <div class="peace-destination">🕊️</div>
+            </div>
+            <div class="peace-steps">
+                <span>Başlangıç</span>
+                <span id="peaceProgress">0%</span>
+                <span>Huzur 🕊️</span>
+            </div>
+        </div>
+
         <button class="btn" id="clickBtn">Moral Yükle ⚡</button>
     </div>
 
@@ -861,6 +960,9 @@
             countElement.textContent = messageCount;
             localStorage.setItem('messageCount', messageCount);
             
+            // Huzura Adım Adım progress bar'ı güncelle
+            updatePeaceProgress();
+            
             // Özel efektler (her 10 mesajda bir)
             if (messageCount % 10 === 0) {
                 createConfetti(e.clientX, e.clientY);
@@ -870,6 +972,47 @@
             if (messageCount % 5 === 0) {
                 createFlowerRain();
             }
+        }
+
+        // Huzura Adım Adım progress bar güncelleme
+        function updatePeaceProgress() {
+            const peaceFill = document.getElementById('peaceFill');
+            const peaceProgress = document.getElementById('peaceProgress');
+            const mihrapBox = document.getElementById('mihrapBox');
+            
+            // Huzura ulaşmak için 100 mesaj hedefi
+            const targetMessages = 100;
+            const progress = Math.min((messageCount / targetMessages) * 100, 100);
+            
+            // Progress bar'ı güncelle
+            peaceFill.style.width = progress + '%';
+            peaceProgress.textContent = Math.round(progress) + '%';
+            
+            // Mihrap kutucuğunu sağa doğru hareket ettir
+            // Kutucuk progress bar'ın içinde, progress'in sonunda olacak
+            const trackWidth = peaceFill.parentElement.offsetWidth;
+            const boxPosition = (progress / 100) * trackWidth;
+            mihrapBox.style.left = boxPosition + 'px';
+            
+            // Huzura ulaşıldığında özel animasyon
+            if (progress >= 100) {
+                mihrapBox.style.animation = 'mihrapPulse 0.5s infinite';
+                peaceProgress.textContent = 'Huzura Ulaşıldı! 🕊️✨';
+                
+                // Özel efektler
+                createConfetti(window.innerWidth / 2, window.innerHeight / 2);
+                createFlowerRain();
+                
+                // Başarı mesajı
+                setTimeout(() => {
+                    alert('🎉 Tebrikler Mihrap! Huzura ulaştın! 🕊️✨\n\n100 mesaj okudun ve huzura adım adım ilerledin. Sen harikasın! 💖');
+                }, 500);
+            }
+        }
+
+        // Sayfa yüklendiğinde progress bar'ı başlat
+        function initPeaceProgress() {
+            updatePeaceProgress();
         }
 
         function createParticles(x, y) {
@@ -1581,9 +1724,10 @@
             }
         }
 
-        // Sayfa yüklendiğinde default müziği başlat
+        // Sayfa yüklendiğinde default müziği başlat ve progress bar'ı başlat
         window.addEventListener('load', () => {
             startDefaultMusic();
+            initPeaceProgress();
         });
 
     </script>
