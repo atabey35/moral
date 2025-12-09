@@ -384,6 +384,212 @@
             color: rgba(255,255,255,0.6);
             font-size: 0.8rem;
         }
+
+        /* Special Features Buttons */
+        .special-buttons {
+            position: absolute;
+            bottom: 80px;
+            display: flex;
+            gap: 15px;
+            z-index: 20;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .special-btn {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .special-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #ff9a9e;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #ff9a9e;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 154, 158, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            color: #4a4a4a;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff9a9e;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 154, 158, 0.3);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff9a9e;
+            box-shadow: 0 0 0 3px rgba(255, 154, 158, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .wish-item,
+        .capsule-item {
+            background: rgba(255, 154, 158, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff9a9e;
+        }
+
+        .wish-date,
+        .capsule-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .music-player {
+            margin-top: 20px;
+        }
+
+        .music-item {
+            background: rgba(255, 154, 158, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .music-item:hover {
+            background: rgba(255, 154, 158, 0.2);
+            transform: translateX(5px);
+        }
+
+        .music-item.playing {
+            background: rgba(255, 154, 158, 0.3);
+            border-left: 4px solid #ff9a9e;
+        }
+
+        .music-icon {
+            font-size: 2rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -401,6 +607,66 @@
 
     <div class="footer">Sadece senin için hazırlandı.</div>
     <div class="counter" id="counter">Mesajlar: <span id="count">0</span></div>
+    
+    <div class="special-buttons">
+        <button class="special-btn" onclick="openWishBox()">💫 Dilek Kutusu</button>
+        <button class="special-btn" onclick="openMusicBox()">🎵 Müzik Kutusu</button>
+        <button class="special-btn" onclick="openTimeCapsule()">⏰ Zaman Kapsülü</button>
+    </div>
+
+    <!-- Dilek Kutusu Modal -->
+    <div id="wishModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">💫 Dilek Kutusu</h2>
+                <button class="close-btn" onclick="closeModal('wishModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Dileğini yaz Mihrap ✨</label>
+                    <textarea id="wishText" placeholder="Dileğini buraya yaz... Evren seni dinliyor 🌟"></textarea>
+                </div>
+                <button class="btn" onclick="saveWish()">Dileği Gönder 🌟</button>
+                <div id="wishList" style="margin-top: 30px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Müzik Kutusu Modal -->
+    <div id="musicModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🎵 Müzik Kutusu</h2>
+                <button class="close-btn" onclick="closeModal('musicModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px; color: #666;">Senin için özel şarkılar 🎶</p>
+                <div id="musicList" class="music-player"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zaman Kapsülü Modal -->
+    <div id="capsuleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⏰ Zaman Kapsülü</h2>
+                <button class="close-btn" onclick="closeModal('capsuleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Gelecekteki Mihrap'a mesaj yaz 💌</label>
+                    <textarea id="capsuleText" placeholder="Gelecekteki kendine ne söylemek istersin?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Açılma Tarihi</label>
+                    <input type="date" id="capsuleDate" min="">
+                </div>
+                <button class="btn" onclick="saveCapsule()">Kapsülü Sakla ⏰</button>
+                <div id="capsuleList" style="margin-top: 30px;"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // İşte o 100'e yakın mesaj listesi (Umut, mutluluk, iltifat)
@@ -801,6 +1067,320 @@
                 }
             }, 100);
         });
+
+        // ========== DİLEK KUTUSU ==========
+        function openWishBox() {
+            const modal = document.getElementById('wishModal');
+            modal.classList.add('active');
+            loadWishes();
+        }
+
+        function saveWish() {
+            const wishText = document.getElementById('wishText').value.trim();
+            if (!wishText) {
+                alert('Lütfen bir dilek yaz Mihrap! ✨');
+                return;
+            }
+
+            const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+            const newWish = {
+                text: wishText,
+                date: new Date().toISOString(),
+                id: Date.now()
+            };
+            wishes.push(newWish);
+            localStorage.setItem('wishes', JSON.stringify(wishes));
+
+            document.getElementById('wishText').value = '';
+            loadWishes();
+            createParticles(window.innerWidth / 2, window.innerHeight / 2);
+            alert('Dileğin kaydedildi! Evren seni dinliyor 🌟');
+        }
+
+        function loadWishes() {
+            const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+            const wishList = document.getElementById('wishList');
+            
+            if (wishes.length === 0) {
+                wishList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💫</div>
+                        <p>Henüz dilek yok. İlk dileğini yaz! ✨</p>
+                    </div>
+                `;
+                return;
+            }
+
+            wishList.innerHTML = wishes.reverse().map(wish => {
+                const date = new Date(wish.date);
+                return `
+                    <div class="wish-item">
+                        <div>${wish.text}</div>
+                        <div class="wish-date">${date.toLocaleDateString('tr-TR', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ========== MÜZİK KUTUSU ==========
+        let currentAudio = null;
+        let currentPlaying = null;
+
+        function openMusicBox() {
+            const modal = document.getElementById('musicModal');
+            modal.classList.add('active');
+            loadMusic();
+        }
+
+        function loadMusic() {
+            const musicList = [
+                {
+                    title: 'Yumuşak Melodi',
+                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+                    icon: '🎵'
+                },
+                {
+                    title: 'Huzur Verici',
+                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+                    icon: '🎶'
+                },
+                {
+                    title: 'Mutluluk Şarkısı',
+                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+                    icon: '🎼'
+                }
+            ];
+
+            const musicListEl = document.getElementById('musicList');
+            
+            // Kullanıcının eklediği özel şarkılar
+            const customMusic = JSON.parse(localStorage.getItem('customMusic') || '[]');
+            const allMusic = [...musicList, ...customMusic];
+
+            if (allMusic.length === 0) {
+                musicListEl.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎵</div>
+                        <p>Henüz şarkı yok. Özel şarkılarını ekleyebilirsin! 🎶</p>
+                    </div>
+                `;
+                return;
+            }
+
+            musicListEl.innerHTML = allMusic.map((music, index) => `
+                <div class="music-item" onclick="playMusic(${index}, '${music.url}', this)">
+                    <div class="music-icon">${music.icon}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${music.title}</div>
+                        ${music.artist ? `<div style="font-size: 0.9rem; color: #999;">${music.artist}</div>` : ''}
+                    </div>
+                    <div id="musicStatus${index}">▶️</div>
+                </div>
+            `).join('');
+        }
+
+        function playMusic(index, url, element) {
+            // Önceki müziği durdur
+            if (currentAudio) {
+                currentAudio.pause();
+                if (currentPlaying) {
+                    currentPlaying.classList.remove('playing');
+                    const prevStatus = currentPlaying.querySelector('[id^="musicStatus"]');
+                    if (prevStatus) prevStatus.textContent = '▶️';
+                }
+            }
+
+            // Aynı şarkıyı tekrar tıkladıysa durdur
+            if (currentPlaying === element && !currentAudio.paused) {
+                currentAudio.pause();
+                element.classList.remove('playing');
+                const status = element.querySelector('[id^="musicStatus"]');
+                if (status) status.textContent = '▶️';
+                currentAudio = null;
+                currentPlaying = null;
+                return;
+            }
+
+            // Yeni müziği çal
+            currentAudio = new Audio(url);
+            currentAudio.play().catch(err => {
+                alert('Müzik çalınamadı. Lütfen geçerli bir URL ekle veya farklı bir şarkı dene.');
+            });
+            
+            element.classList.add('playing');
+            currentPlaying = element;
+            const status = element.querySelector('[id^="musicStatus"]');
+            if (status) status.textContent = '⏸️';
+
+            currentAudio.onended = () => {
+                element.classList.remove('playing');
+                if (status) status.textContent = '▶️';
+                currentAudio = null;
+                currentPlaying = null;
+            };
+        }
+
+        // ========== ZAMAN KAPSÜLÜ ==========
+        function openTimeCapsule() {
+            const modal = document.getElementById('capsuleModal');
+            const dateInput = document.getElementById('capsuleDate');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            modal.classList.add('active');
+            loadCapsules();
+            checkCapsules();
+        }
+
+        function saveCapsule() {
+            const capsuleText = document.getElementById('capsuleText').value.trim();
+            const capsuleDate = document.getElementById('capsuleDate').value;
+
+            if (!capsuleText) {
+                alert('Lütfen bir mesaj yaz Mihrap! 💌');
+                return;
+            }
+
+            if (!capsuleDate) {
+                alert('Lütfen bir tarih seç! ⏰');
+                return;
+            }
+
+            const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
+            const newCapsule = {
+                text: capsuleText,
+                openDate: capsuleDate,
+                createdDate: new Date().toISOString(),
+                id: Date.now(),
+                opened: false
+            };
+            capsules.push(newCapsule);
+            localStorage.setItem('capsules', JSON.stringify(capsules));
+
+            document.getElementById('capsuleText').value = '';
+            document.getElementById('capsuleDate').value = '';
+            loadCapsules();
+            checkCapsules();
+            createParticles(window.innerWidth / 2, window.innerHeight / 2);
+            alert('Zaman kapsülün kaydedildi! Belirlediğin tarihte açılacak ⏰✨');
+        }
+
+        function loadCapsules() {
+            const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
+            const capsuleList = document.getElementById('capsuleList');
+            
+            if (capsules.length === 0) {
+                capsuleList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⏰</div>
+                        <p>Henüz zaman kapsülü yok. Gelecekteki kendine mesaj yaz! 💌</p>
+                    </div>
+                `;
+                return;
+            }
+
+            capsuleList.innerHTML = capsules.reverse().map(capsule => {
+                const openDate = new Date(capsule.openDate);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const openDateOnly = new Date(openDate);
+                openDateOnly.setHours(0, 0, 0, 0);
+                const isOpenable = openDateOnly <= today;
+                const createdDate = new Date(capsule.createdDate);
+
+                return `
+                    <div class="capsule-item" style="${isOpenable && !capsule.opened ? 'border-left-color: #4CAF50; background: rgba(76, 175, 80, 0.1);' : ''}">
+                        ${capsule.opened ? `
+                            <div style="font-weight: 600; color: #4CAF50; margin-bottom: 10px;">✨ Açıldı ✨</div>
+                            <div>${capsule.text}</div>
+                        ` : isOpenable ? `
+                            <div style="font-weight: 600; color: #4CAF50; margin-bottom: 10px;">🎉 Açılabilir! 🎉</div>
+                            <div style="margin-bottom: 10px;">${capsule.text.substring(0, 50)}${capsule.text.length > 50 ? '...' : ''}</div>
+                            <button class="btn" onclick="openCapsule(${capsule.id})" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Kapsülü Aç ⏰</button>
+                        ` : `
+                            <div style="margin-bottom: 10px;">${capsule.text.substring(0, 50)}${capsule.text.length > 50 ? '...' : ''}</div>
+                        `}
+                        <div class="capsule-date">
+                            Oluşturulma: ${createdDate.toLocaleDateString('tr-TR')} | 
+                            Açılma: ${openDate.toLocaleDateString('tr-TR')}
+                            ${!isOpenable ? ` (${Math.ceil((openDateOnly - today) / (1000 * 60 * 60 * 24))} gün kaldı)` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openCapsule(id) {
+            const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
+            const capsule = capsules.find(c => c.id === id);
+            
+            if (!capsule) return;
+
+            if (confirm('Bu zaman kapsülünü açmak istediğine emin misin? ⏰✨')) {
+                capsule.opened = true;
+                localStorage.setItem('capsules', JSON.stringify(capsules));
+                
+                // Özel animasyon
+                createConfetti(window.innerWidth / 2, window.innerHeight / 2);
+                createFlowerRain();
+                
+                alert(`💌 ${capsule.text}\n\n✨ Bu mesajı ${new Date(capsule.createdDate).toLocaleDateString('tr-TR')} tarihinde yazmıştın!`);
+                
+                loadCapsules();
+            }
+        }
+
+        function checkCapsules() {
+            const capsules = JSON.parse(localStorage.getItem('capsules') || '[]');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            capsules.forEach(capsule => {
+                if (capsule.opened) return;
+                
+                const openDate = new Date(capsule.openDate);
+                openDate.setHours(0, 0, 0, 0);
+                
+                if (openDate <= today) {
+                    // Açılabilir kapsül var, bildirim göster
+                    console.log('Açılabilir zaman kapsülü var!');
+                }
+            });
+        }
+
+        // Modal kapatma
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            
+            // Müzik durdur
+            if (modalId === 'musicModal' && currentAudio) {
+                currentAudio.pause();
+                if (currentPlaying) {
+                    currentPlaying.classList.remove('playing');
+                    const status = currentPlaying.querySelector('[id^="musicStatus"]');
+                    if (status) status.textContent = '▶️';
+                }
+                currentAudio = null;
+                currentPlaying = null;
+            }
+        }
+
+        // Modal dışına tıklayınca kapat
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                closeModal(e.target.id);
+            }
+        });
+
+        // Sayfa yüklendiğinde zaman kapsüllerini kontrol et
+        checkCapsules();
+        setInterval(checkCapsules, 60000); // Her dakika kontrol et
 
     </script>
 </body>
