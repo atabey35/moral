@@ -955,6 +955,11 @@
             // Partikül efekti
             createParticles(e.clientX, e.clientY);
             
+            // İlk tıklamada Static şarkısını başlat (eğer başlamadıysa)
+            if (!currentAudio || currentAudio.paused) {
+                startStaticMusic();
+            }
+            
             // Mesaj sayacını artır
             messageCount++;
             countElement.textContent = messageCount;
@@ -1661,71 +1666,70 @@
         checkCapsules();
         setInterval(checkCapsules, 60000); // Her dakika kontrol et
 
+        // Static şarkısını başlat (butona tıklandığında veya sayfa yüklendiğinde)
+        function startStaticMusic() {
+            // Eğer müzik zaten çalıyorsa başlatma
+            if (currentAudio && !currentAudio.paused) {
+                return;
+            }
+
+            // Static şarkısını bul ve çal
+            const staticMusic = {
+                title: 'Static',
+                url: './music3.mp3',
+                icon: '🎼',
+                artist: 'No Clear Mind'
+            };
+
+            // Önceki müziği durdur
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            currentAudio = new Audio(staticMusic.url);
+            currentAudio.play().then(() => {
+                updateMusicControl();
+                // Müzik kontrolü için güncelleme
+                const musicTitle = document.getElementById('currentMusicTitle');
+                if (musicTitle) {
+                    musicTitle.textContent = staticMusic.title;
+                }
+                localStorage.setItem('musicStopped', 'false');
+            }).catch(err => {
+                console.log('Müzik başlatılamadı:', err);
+            });
+
+            // Müzik durumunu takip et
+            currentAudio.addEventListener('play', () => {
+                updateMusicControl();
+            });
+            
+            currentAudio.addEventListener('pause', () => {
+                updateMusicControl();
+            });
+
+            currentAudio.onended = () => {
+                currentAudio = null;
+                currentPlaying = null;
+                updateMusicControl();
+            };
+        }
+
         // Sayfa yüklendiğinde Static şarkısını otomatik başlat
         function startDefaultMusic() {
             // Kullanıcı daha önce müziği durdurmuşsa başlatma
             const musicStopped = localStorage.getItem('musicStopped');
             if (musicStopped === 'true') return;
 
-            // Static şarkısını bul ve çal
-            const musicList = [
-                {
-                    title: 'When You\'re Not Here',
-                    url: './music1.mp3',
-                    icon: '🎵',
-                    artist: 'No Clear Mind'
-                },
-                {
-                    title: 'Dream Is Destiny',
-                    url: './music2.mp3',
-                    icon: '🎶',
-                    artist: 'No Clear Mind'
-                },
-                {
-                    title: 'Static',
-                    url: './music3.mp3',
-                    icon: '🎼',
-                    artist: 'No Clear Mind'
-                }
-            ];
-
-            const staticMusic = musicList.find(m => m.title === 'Static');
-            if (staticMusic) {
-                // Biraz gecikme ile başlat (sayfa tam yüklensin)
-                setTimeout(() => {
-                    currentAudio = new Audio(staticMusic.url);
-                    currentAudio.play().then(() => {
-                        updateMusicControl();
-                        // Müzik kontrolü için güncelleme
-                        const musicTitle = document.getElementById('currentMusicTitle');
-                        if (musicTitle) {
-                            musicTitle.textContent = staticMusic.title;
-                        }
-                    }).catch(err => {
-                        console.log('Müzik otomatik başlatılamadı:', err);
-                    });
-
-                    // Müzik durumunu takip et
-                    currentAudio.addEventListener('play', () => {
-                        updateMusicControl();
-                    });
-                    
-                    currentAudio.addEventListener('pause', () => {
-                        updateMusicControl();
-                    });
-
-                    currentAudio.onended = () => {
-                        currentAudio = null;
-                        currentPlaying = null;
-                        updateMusicControl();
-                    };
-                }, 500);
-            }
+            // Biraz gecikme ile başlat (sayfa tam yüklensin)
+            setTimeout(() => {
+                startStaticMusic();
+            }, 500);
         }
 
-        // Sayfa yüklendiğinde default müziği başlat ve progress bar'ı başlat
+        // Sayfa yüklendiğinde progress bar'ı başlat
         window.addEventListener('load', () => {
-            startDefaultMusic();
             initPeaceProgress();
         });
 
