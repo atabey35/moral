@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sadece Gülümse Mihrap ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Sacramento&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer; /* Her yere tıklanabileceğini hissettir */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 40px;
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 3.5rem;
+            color: #fff;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        p.hint {
+            color: #fff;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        #message-box {
+            font-size: 1.4rem;
+            color: #4a4a4a;
+            font-weight: 600;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+
+        .btn {
+            background: #fff;
+            color: #ff9a9e;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .btn:hover {
+            background: #ffe6e9;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: rise 1.5s forwards;
+            font-size: 1.5rem;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-150px) translateX(var(--x)) rotate(var(--r)); opacity: 0; }
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Mihrap</h1>
+        <p class="hint">Modunu yükseltmek için butona veya herhangi bir yere tıkla ✨</p>
+        
+        <div id="message-box">
+            Hazır mısın? 🎈
+        </div>
+
+        <button class="btn" id="clickBtn">Moral Yükle ⚡</button>
+    </div>
+
+    <div class="footer">Sadece senin için hazırlandı.</div>
+
+    <script>
+        // İşte o 100'e yakın mesaj listesi (Umut, mutluluk, iltifat)
+        const messages = [
+            "Bugün harika bir gün olacak, inan buna!",
+            "Senin enerjin dünyayı değiştirebilir. ✨",
+            "Mihrap, derin bir nefes al ve gökyüzüne bak.",
+            "Her şey geçici, senin güzelliğin kalıcı.",
+            "Bazen en güzel yollar, en zorlu başlangıçlarla gelir.",
+            "Gülümsemen bulaşıcı, lütfen saklama! 😊",
+            "Sen sandığından çok daha güçlüsün.",
+            "Bugün kendine bir güzellik yap.",
+            "Yağmurdan sonra gökkuşağı mutlaka çıkar. 🌈",
+            "Yıldızlar sadece karanlıkta parlar, unutma.",
+            "Senin gibi naif bir ruh her şeyi hak ediyor.",
+            "Dünya seninle daha güzel bir yer.",
+            "Bir fincan kahve ve güzel bir müzik? ☕",
+            "Her şey yoluna girecek, sadece sabret.",
+            "Mucizeler, sen vazgeçmediğinde gerçekleşir.",
+            "Kafana takma, hayat çok kısa!",
+            "Şu anki hislerin geçici, ama potansiyelin sonsuz.",
+            "Gözlerindeki ışık hiç sönmesin Mihrap.",
+            "Bir kapı kapanır, bin kapı açılır.",
+            "Kendine güven, sen yaparsın! 💪",
+            "Bugün, hayatının geri kalanının ilk günü.",
+            "Pozitif düşün, pozitif yaşa.",
+            "Seni üzen her şeyi bir kenara bırak.",
+            "Mihrap demek, zarafet demek.",
+            "Bugün aynaya bak ve 'Ben harikayım' de! 😎",
+            "En karanlık gece bile sabahla biter.",
+            "Sen bir savaşçısın, asla pes etme.",
+            "Mutluluk bir seçimdir, bugün mutlu olmayı seç.",
+            "Hayat sürprizlerle dolu, bekle ve gör.",
+            "Senin kalbin kadar güzel bir gün olsun.",
+            "Rüzgarın yönünü değiştiremezsin ama yelkenlerini ayarlayabilirsin.",
+            "Küçük mutlulukların tadını çıkar.",
+            "Sen yeter ki iste, evren sana yardım eder.",
+            "Kendine nazik davran.",
+            "Bugün birine iyilik yap, belki de kendine?",
+            "Güneş her sabah senin için doğuyor. ☀️",
+            "Zorluklar seni güçlendirmek için var.",
+            "Gülmek sana çok yakışıyor.",
+            "Hayallerinin peşinden git.",
+            "Senin varlığın başlı başına bir hediye.",
+            "Kötü günleri tecrübe, iyi günleri anı olarak sakla.",
+            "Her düşüş, daha yükseğe sıçramak için bir fırsattır.",
+            "Mihrap, içindeki ışığı serbest bırak.",
+            "Bugün kendin için bir şey yap.",
+            "Mutluluk detaylarda gizlidir.",
+            "Senin potansiyelin sınır tanımaz.",
+            "Hayat bir ayna gibidir, gülümsersen o da sana gülümser.",
+            "Asla yalnız değilsin.",
+            "Bugün yeni bir başlangıç için harika bir gün.",
+            "Geçmişe takılma, anın tadını çıkar.",
+            "Sen çok özelsin, bunu asla unutma.",
+            "Belki de aradığın şey, seni arıyordur?",
+            "Kalbinin sesini dinle, o yolu biliyor.",
+            "Her problem, içinde bir hediye saklar.",
+            "Seninle konuşmak bile insana huzur veriyor.",
+            "Kendini sev, çünkü sen buna değersin.",
+            "Umut, uyanık insanların rüyasıdır.",
+            "Başarmak için önce inanmak gerekir.",
+            "Hayatın ritmini yakala.",
+            "Bugün endişelenmeyi bırak, yaşamaya başla.",
+            "Sen bir başyapıtsın.",
+            "Engeller sadece korkanlar içindir, sen cesursun.",
+            "Gelecek, güzelliklerine inananlarındır.",
+            "Mihrap, dünyanın sana ihtiyacı var.",
+            "Biraz mola ver, her şeye yetişmek zorunda değilsin.",
+            "Şu an tam olman gereken yerdesin.",
+            "Düşlediğin her şey gerçek olabilir.",
+            "Sabır, acıdır ama meyvesi tatlıdır.",
+            "Senin ruhun çiçek bahçesi gibi. 🌸",
+            "Bugün şans seninle olsun! 🍀",
+            "Negatif insanları boşver, sen yoluna bak.",
+            "Başarı, küçük çabaların toplamıdır.",
+            "Senin neşen çevrene ışık saçıyor.",
+            "Hayat bir macera, tadını çıkar.",
+            "En iyi intikam, muazzam bir başarıdır.",
+            "Bugün gökyüzü senin için mavi.",
+            "Mihrap, sen bir ilhamsın.",
+            "Hayat, fırtınanın geçmesini beklemek değil, yağmurda dans etmektir.",
+            "Her yeni gün, yeni bir umut.",
+            "İyi şeyler zaman alır.",
+            "Senin enerjin paha biçilemez.",
+            "Dün bitti, yarın meçhul, an bu andır.",
+            "Sadece olduğun gibi mükemmelsin.",
+            "Kendine inanmaktan asla vazgeçme.",
+            "Güzellik görenin gözündedir, ama sen herkesin gözünde güzelsin.",
+            "Hayat, sen planlar yaparken başına gelenlerdir.",
+            "Mutluluk varılacak bir yer değil, yolculuğun kendisidir.",
+            "Senin hikayen çok güzel olacak.",
+            "Bugün biraz şımarıklık yapmaya hakkın var!",
+            "Evren seninle işbirliği yapıyor.",
+            "Kalbin rehberin olsun.",
+            "Mihrap, sen teksin!",
+            "Korkularının üzerine git.",
+            "Başarıya giden yol, denemekten geçer.",
+            "Hayat kısa, kuşlar uçuyor... 🕊️",
+            "Her şey çok güzel olacak! ✨"
+        ];
+
+        const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#8fd3f4', '#84fab0'];
+        const emojis = ['✨', '🌸', '💖', '🦄', '🎈', '🍫', '🍀', '☀️', '🦋', '🎉', '🌈'];
+
+        const btn = document.getElementById('clickBtn');
+        const messageBox = document.getElementById('message-box');
+        
+        // Ses efekti eklemek istersen buraya kod eklenebilir ama sessiz daha güvenli.
+
+        function showMessage(e) {
+            // Rastgele mesaj
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            
+            // Text animasyonu
+            messageBox.style.opacity = 0;
+            setTimeout(() => {
+                messageBox.innerText = randomMsg;
+                messageBox.style.opacity = 1;
+            }, 200);
+
+            // Buton yazısını değiştir
+            const btnTexts = ["Daha Fazla? 🚀", "Yine Bas! ✨", "Moral Ver! 💖", "Bir Tane Daha!", "Tıkla! 🎈"];
+            btn.innerText = btnTexts[Math.floor(Math.random() * btnTexts.length)];
+
+            // Partikül efekti
+            createParticles(e.clientX, e.clientY);
+        }
+
+        function createParticles(x, y) {
+            const count = 15; // Patlama yoğunluğu
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                document.body.appendChild(p);
+
+                // Rastgele dağılım
+                const xVal = (Math.random() - 0.5) * 300 + 'px';
+                const rVal = (Math.random() - 0.5) * 360 + 'deg';
+                
+                p.style.setProperty('--x', xVal);
+                p.style.setProperty('--r', rVal);
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+
+                setTimeout(() => p.remove(), 1500);
+            }
+        }
+
+        // Tıklama olayları
+        btn.addEventListener('click', showMessage);
+        
+        // Ekranda herhangi bir yere tıklayınca da çalışsın (mobil uyumlu)
+        document.body.addEventListener('click', (e) => {
+            if(e.target !== btn) {
+                createParticles(e.clientX, e.clientY);
+                // İstersen her tıklamada mesaj değişsin diye buraya da showMessage ekleyebilirsin:
+                if (Math.random() > 0.5) showMessage(e); // Sadece bazen mesaj değişsin, bazen sadece efekt olsun
+            }
+        });
+
+    </script>
+</body>
+</html>
