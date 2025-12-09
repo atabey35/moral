@@ -223,6 +223,85 @@
             }
         }
 
+        /* Butterflies */
+        .butterfly {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2rem;
+            z-index: 5;
+            opacity: 0.7;
+        }
+
+        .butterfly.left {
+            animation: flyFromLeft 12s infinite;
+        }
+
+        .butterfly.right {
+            animation: flyFromRight 12s infinite;
+        }
+
+        @keyframes flyFromLeft {
+            0% {
+                transform: translateX(-150px) translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateX(10vw) translateY(-50px) rotate(-15deg) scale(1);
+            }
+            50% {
+                transform: translateX(45vw) translateY(-100px) rotate(15deg) scale(1.2);
+            }
+            75% {
+                transform: translateX(80vw) translateY(-50px) rotate(-10deg) scale(1);
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(calc(100vw + 150px)) translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyFromRight {
+            0% {
+                transform: translateX(calc(100vw + 150px)) translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateX(90vw) translateY(-50px) rotate(15deg) scale(1);
+            }
+            50% {
+                transform: translateX(55vw) translateY(-100px) rotate(-15deg) scale(1.2);
+            }
+            75% {
+                transform: translateX(20vw) translateY(-50px) rotate(10deg) scale(1);
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(-150px) translateY(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Butterfly wing animation */
+        @keyframes butterflyFlutter {
+            0%, 100% {
+                transform: rotateY(0deg);
+            }
+            50% {
+                transform: rotateY(20deg);
+            }
+        }
+
         .footer {
             position: absolute;
             bottom: 20px;
@@ -439,8 +518,57 @@
             }, 2000);
         }
 
-        // Sayfa yüklendiğinde arka plan kalpleri başlat
+        // Kelebek oluşturma fonksiyonu
+        function createButterfly(side) {
+            const butterfly = document.createElement('div');
+            butterfly.classList.add('butterfly', side);
+            butterfly.innerText = '🦋';
+            
+            // Rastgele Y pozisyonu (ekranın farklı yüksekliklerinde)
+            const randomY = Math.random() * (window.innerHeight * 0.6) + (window.innerHeight * 0.2);
+            butterfly.style.top = randomY + 'px';
+            
+            // Rastgele animasyon süresi (daha doğal görünsün)
+            const duration = 10 + Math.random() * 6; // 10-16 saniye arası
+            butterfly.style.animationDuration = duration + 's';
+            
+            // Rastgele gecikme (aynı anda çok fazla kelebek olmasın)
+            butterfly.style.animationDelay = Math.random() * 3 + 's';
+            
+            // Rastgele boyut
+            const size = 1.5 + Math.random() * 1;
+            butterfly.style.fontSize = (size * 2) + 'rem';
+            
+            // Rastgele opaklık
+            butterfly.style.opacity = 0.5 + Math.random() * 0.3;
+            
+            document.body.appendChild(butterfly);
+            
+            // Animasyon bitince kaldır
+            setTimeout(() => {
+                butterfly.remove();
+            }, (duration + 3) * 1000);
+        }
+
+        // Sürekli kelebek oluştur
+        function startButterflies() {
+            // İlk kelebekleri oluştur
+            setTimeout(() => createButterfly('left'), 1000);
+            setTimeout(() => createButterfly('right'), 2000);
+            
+            // Belirli aralıklarla yeni kelebekler oluştur
+            setInterval(() => {
+                if (Math.random() > 0.5) {
+                    createButterfly('left');
+                } else {
+                    createButterfly('right');
+                }
+            }, 4000); // Her 4 saniyede bir yeni kelebek
+        }
+
+        // Sayfa yüklendiğinde arka plan kalpleri ve kelebekleri başlat
         createFloatingHearts();
+        startButterflies();
 
         // Tıklama olayları
         btn.addEventListener('click', showMessage);
