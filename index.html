@@ -590,6 +590,55 @@
             font-size: 4rem;
             margin-bottom: 10px;
         }
+
+        /* Music Control Bar */
+        #musicControl {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            min-width: 300px;
+        }
+
+        #musicControl.visible {
+            display: flex;
+        }
+
+        .music-control-btn {
+            background: #ff9a9e;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .music-control-btn:hover {
+            background: #ff6b9d;
+            transform: scale(1.1);
+        }
+
+        #currentMusicTitle {
+            flex: 1;
+            font-weight: 600;
+            color: #4a4a4a;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -607,6 +656,13 @@
 
     <div class="footer">Sadece senin için hazırlandı.</div>
     <div class="counter" id="counter">Mesajlar: <span id="count">0</span></div>
+    
+    <!-- Music Control Bar -->
+    <div id="musicControl" class="music-control">
+        <button class="music-control-btn" onclick="toggleMusic()" id="playPauseBtn">⏸️</button>
+        <div id="currentMusicTitle">Çalıyor...</div>
+        <button class="music-control-btn" onclick="stopMusic()">⏹️</button>
+    </div>
     
     <div class="special-buttons">
         <button class="special-btn" onclick="openWishBox()">💫 Dilek Kutusu</button>
@@ -1141,19 +1197,22 @@
         function loadMusic() {
             const musicList = [
                 {
-                    title: 'Yumuşak Melodi',
-                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-                    icon: '🎵'
+                    title: 'When You\'re Not Here',
+                    url: './music1.mp3',
+                    icon: '🎵',
+                    artist: 'No Clear Mind'
                 },
                 {
-                    title: 'Huzur Verici',
-                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-                    icon: '🎶'
+                    title: 'Dream Is Destiny',
+                    url: './music2.mp3',
+                    icon: '🎶',
+                    artist: 'No Clear Mind'
                 },
                 {
-                    title: 'Mutluluk Şarkısı',
-                    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-                    icon: '🎼'
+                    title: 'Static',
+                    url: './music3.mp3',
+                    icon: '🎼',
+                    artist: 'No Clear Mind'
                 }
             ];
 
@@ -1209,8 +1268,12 @@
 
             // Yeni müziği çal
             currentAudio = new Audio(url);
-            currentAudio.play().catch(err => {
-                alert('Müzik çalınamadı. Lütfen geçerli bir URL ekle veya farklı bir şarkı dene.');
+            currentAudio.play().then(() => {
+                // Müzik başarıyla başladı, modal'ı kapat
+                closeModal('musicModal', false); // false = müziği durdurma
+                updateMusicControl();
+            }).catch(err => {
+                alert('Müzik çalınamadı. Lütfen geçerli bir dosya ekle veya farklı bir şarkı dene.');
             });
             
             element.classList.add('playing');
@@ -1218,12 +1281,50 @@
             const status = element.querySelector('[id^="musicStatus"]');
             if (status) status.textContent = '⏸️';
 
+            // Müzik durumunu takip et
+            currentAudio.addEventListener('play', () => {
+                updateMusicControl();
+            });
+            
+            currentAudio.addEventListener('pause', () => {
+                updateMusicControl();
+            });
+
             currentAudio.onended = () => {
                 element.classList.remove('playing');
                 if (status) status.textContent = '▶️';
                 currentAudio = null;
                 currentPlaying = null;
+                updateMusicControl();
             };
+        }
+
+        // Müzik durdur/başlat
+        function toggleMusic() {
+            if (!currentAudio) return;
+            
+            if (currentAudio.paused) {
+                currentAudio.play();
+            } else {
+                currentAudio.pause();
+            }
+            updateMusicControl();
+        }
+
+        // Müziği durdur
+        function stopMusic() {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+                if (currentPlaying) {
+                    currentPlaying.classList.remove('playing');
+                    const status = currentPlaying.querySelector('[id^="musicStatus"]');
+                    if (status) status.textContent = '▶️';
+                }
+                currentAudio = null;
+                currentPlaying = null;
+                updateMusicControl();
+            }
         }
 
         // ========== ZAMAN KAPSÜLÜ ==========
@@ -1354,12 +1455,12 @@
         }
 
         // Modal kapatma
-        function closeModal(modalId) {
+        function closeModal(modalId, stopMusic = true) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('active');
             
-            // Müzik durdur
-            if (modalId === 'musicModal' && currentAudio) {
+            // Müzik durdur (sadece stopMusic true ise)
+            if (modalId === 'musicModal' && currentAudio && stopMusic) {
                 currentAudio.pause();
                 if (currentPlaying) {
                     currentPlaying.classList.remove('playing');
@@ -1368,13 +1469,45 @@
                 }
                 currentAudio = null;
                 currentPlaying = null;
+                updateMusicControl();
+            }
+        }
+
+        // Müzik kontrolü güncelle
+        function updateMusicControl() {
+            const musicControl = document.getElementById('musicControl');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            if (!musicControl) return;
+            
+            if (currentAudio) {
+                musicControl.style.display = 'flex';
+                musicControl.classList.add('visible');
+                
+                const musicTitle = document.getElementById('currentMusicTitle');
+                if (musicTitle && currentPlaying) {
+                    const titleEl = currentPlaying.querySelector('div[style*="font-weight: 600"]');
+                    musicTitle.textContent = titleEl ? titleEl.textContent : 'Çalıyor...';
+                }
+                
+                // Play/Pause butonunu güncelle
+                if (playPauseBtn) {
+                    playPauseBtn.textContent = currentAudio.paused ? '▶️' : '⏸️';
+                }
+            } else {
+                musicControl.style.display = 'none';
+                musicControl.classList.remove('visible');
             }
         }
 
         // Modal dışına tıklayınca kapat
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
-                closeModal(e.target.id);
+                // Müzik kutusu modal'ı için müziği durdurma
+                if (e.target.id === 'musicModal') {
+                    closeModal(e.target.id, false);
+                } else {
+                    closeModal(e.target.id);
+                }
             }
         });
 
