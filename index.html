@@ -78,7 +78,7 @@
             line-height: 1.4;
         }
 
-        /* Huzura Adım Adım Progress Bar */
+        /* Kendini Bul! Progress Bar */
         .peace-progress {
             width: 100%;
             margin: 20px 0;
@@ -734,19 +734,19 @@
             Hazır mısın? 🎈
         </div>
 
-        <!-- Huzura Adım Adım Progress Bar -->
+        <!-- Kendini Bul! Progress Bar -->
         <div class="peace-progress">
-            <div class="peace-progress-label">Huzura Adım Adım 🕊️</div>
+            <div class="peace-progress-label">Kendini Bul! ✨</div>
             <div class="peace-track">
                 <div class="peace-fill" id="peaceFill" style="width: 0%;">
                     <div class="mihrap-box" id="mihrapBox">💖</div>
                 </div>
-                <div class="peace-destination">🕊️</div>
+                <div class="peace-destination">✨</div>
             </div>
             <div class="peace-steps">
                 <span>Başlangıç</span>
                 <span id="peaceProgress">0%</span>
-                <span>Huzur 🕊️</span>
+                <span>Kendini Buldun ✨</span>
             </div>
         </div>
 
@@ -959,7 +959,7 @@
             messageCount++;
             countElement.textContent = messageCount;
             
-            // Huzura Adım Adım progress bar'ı güncelle
+            // Kendini Bul! progress bar'ı güncelle
             updatePeaceProgress();
             
             // Özel efektler (her 10 mesajda bir)
@@ -973,13 +973,13 @@
             }
         }
 
-        // Huzura Adım Adım progress bar güncelleme
+        // Kendini Bul! progress bar güncelleme
         function updatePeaceProgress() {
             const peaceFill = document.getElementById('peaceFill');
             const peaceProgress = document.getElementById('peaceProgress');
             const mihrapBox = document.getElementById('mihrapBox');
             
-            // Huzura ulaşmak için 100 mesaj hedefi
+            // Kendini bulmak için 100 mesaj hedefi
             const targetMessages = 100;
             const progress = Math.min((messageCount / targetMessages) * 100, 100);
             
@@ -993,10 +993,10 @@
             const boxPosition = (progress / 100) * trackWidth;
             mihrapBox.style.left = boxPosition + 'px';
             
-            // Huzura ulaşıldığında özel animasyon
+            // Kendini bulduğunda özel animasyon
             if (progress >= 100) {
                 mihrapBox.style.animation = 'mihrapPulse 0.5s infinite';
-                peaceProgress.textContent = 'Huzura Ulaşıldı! 🕊️✨';
+                peaceProgress.textContent = 'Kendini Buldun! ✨';
                 
                 // Özel efektler
                 createConfetti(window.innerWidth / 2, window.innerHeight / 2);
@@ -1004,7 +1004,7 @@
                 
                 // Başarı mesajı
                 setTimeout(() => {
-                    alert('🎉 Tebrikler Mihrap! Huzura ulaştın! 🕊️✨\n\n100 mesaj okudun ve huzura adım adım ilerledin. Sen harikasın! 💖');
+                    alert('🎉 Tebrikler Mihrap! Kendini buldun! ✨\n\n100 mesaj okudun ve kendine adım adım yaklaştın. Sen harikasın! 💖');
                 }, 500);
             }
         }
